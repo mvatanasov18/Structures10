@@ -14,14 +14,16 @@ struct PRODUCT {
     int quantity=0;
     int expDate=0;
     PERSON person;
+    int id;
 };
 
 void createOrder(PRODUCT* product, int& productCount);
 void getOrderbyBrand(PRODUCT* product, int& productCount);
 void clExProd();
 void deleteProduct();
+int findById(PRODUCT*, int&, int);
 
-bool showMenu(PRODUCT* product,int& productCount) {
+bool showMenu(PRODUCT* product,int& productCount, int &maxId) {
     int userInput;
     cout << "\nWelcome to our programme about icecream: " << endl;
     cout << "1. Create a new order" << endl;
@@ -34,10 +36,10 @@ bool showMenu(PRODUCT* product,int& productCount) {
     switch (userInput)
     {
     case 1:
-        createOrder(PRODUCT * product, int& productCount);
+        createOrder(product, productCount);
         break;
     case 2:
-        showAvailProd(PRODUCT * product, int& productCount);
+        showAvailProd(product, productCount);
         break;
     case 3:
         clExProd();
@@ -89,13 +91,30 @@ void upExProd() {
 
 }
 
-void deleteProduct() {
+void deleteProduct(PRODUCT *products, int &productCount, int id)
+{
+    int delPos;
 
+    delPos=findById(products, productCount, id);
+
+    for (int i = delPos; i < productCount-1; i++) {
+        products[i]=products[i+1];
+    }
+
+    productCount--;
+}
+
+int findById(PRODUCT* products, int& productCount, int id)
+{
+    for (int i = 0; i < productCount; i++) {    //TODO: change to bin search
+        if (products[i].id==id) return i;
+    }
+    return -1;
 }
 
 int main()
 {
     PRODUCT product[100];
-    int productCount = 0;
-    while(showMenu(product, productCount));
+    int productCount = 0, maxId=1;
+    while(showMenu(product, productCount, maxId));
 }
