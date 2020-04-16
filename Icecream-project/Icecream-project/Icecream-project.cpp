@@ -17,7 +17,7 @@ struct PRODUCT {
 };
 
 void createOrder(PRODUCT* product, int& productCount);
-void showAvailProd();
+void getOrderbyBrand(PRODUCT* product, int& productCount);
 void clExProd();
 void deleteProduct();
 
@@ -37,7 +37,7 @@ bool showMenu(PRODUCT* product,int& productCount) {
         createOrder(PRODUCT * product, int& productCount);
         break;
     case 2:
-        showAvailProd();
+        showAvailProd(PRODUCT * product, int& productCount);
         break;
     case 3:
         clExProd();
@@ -77,11 +77,15 @@ void createOrder(PRODUCT* product, int& productCount) {
 
 }
 
-void showAvailProd() {
-
+void showAvailProd(PRODUCT* product, int& productCount) {
+    cout << "The list of the entered products: " << endl;
+    for (int i = 0; i < productCount; i++)
+    {
+        cout << product[i].brand << " " << product[i].flavour << " " << product[i].price << " " << product[i].quantity << " " << product[i].expDate << " " << product[i].person.firstName << " " << product[i].person.lastName << " " << product[i].person.years << endl;
+    }
 }
 
-void clExProd() {
+void upExProd() {
 
 }
 
