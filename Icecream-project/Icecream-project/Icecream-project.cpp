@@ -18,9 +18,9 @@ struct PRODUCT {
 };
 
 void createOrder(PRODUCT* product, int& productCount);
-void getOrderbyBrand(PRODUCT* product, int& productCount);
+//void getOrderbyBrand(PRODUCT* product, int& productCount);
 void clExProd();
-void deleteProduct();
+void deleteProduct(PRODUCT* products, int& productCount, int id);
 int findById(PRODUCT*, int&, int);
 
 bool showMenu(PRODUCT* product,int& productCount, int &maxId) {
@@ -45,7 +45,7 @@ bool showMenu(PRODUCT* product,int& productCount, int &maxId) {
         clExProd();
         break;
     case 4:
-        deleteProduct();
+        deleteProduct(PRODUCT * products, int& productCount, int id);
         break;
     case 5: return false;
     }
