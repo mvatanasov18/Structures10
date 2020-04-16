@@ -7,6 +7,12 @@ struct PRODUCT {
     int quantity;
     int expDate;
 };
+
+void createOrder();
+void showAvailProd();
+void clExProd();
+void deleteProduct();
+
 bool showMenu() {
     int userInput;
     cout << "\nWelcome to our programme about icecream: " << endl;
@@ -17,12 +23,20 @@ bool showMenu() {
     cout << "5. Quit" << endl;
     cout << "Enter option from the menu by typing a number: ";
     cin >> userInput;
-    switch (showMenu())
+    switch (userInput)
     {
-    case 1:createOrder();
-    case 2:showAvailProd();
-    case 3:clExProd();
-    case 4:deleteProduct();
+    case 1:
+        createOrder();
+        break;
+    case 2:
+        showAvailProd();
+        break;
+    case 3:
+        clExProd();
+        break;
+    case 4:
+        deleteProduct();
+        break;
     case 5: return false;
     }
     return true;
@@ -47,8 +61,6 @@ void deleteProduct() {
 int main()
 {
     PRODUCT product[100];
-    bool doShowMenu;
-    do {
-        doShowMenu = showMenu();
-    } while (doShowMenu);
+    
+    while(showMenu());
 }
