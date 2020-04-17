@@ -49,7 +49,7 @@ bool showMenu(PRODUCT* product,int& productCount, int &maxId) {
         clearExpiredProducts();
         break;
     case 4:
-        deleteProduct(products, productCount, id);
+        deleteProduct(product, productCount, id);
         break;
     case 5: return false;
     }
