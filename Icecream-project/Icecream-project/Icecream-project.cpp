@@ -107,9 +107,17 @@ void deleteProduct(PRODUCT *products, int &productCount, int id)
 
 int findById(PRODUCT* products, int& productCount, int id)
 {
-    for (int i = 0; i < productCount; i++) {    //TODO: change to bin search
-        if (products[i].id==id) return i;
+    int lBound=0, rBound=productCount-1, mid=1, lastMid=0;
+
+    while (mid != lastMid) {
+        lastMid=mid;
+        mid=(lBound+rBound)/2;
+
+		if (id == products[mid].id) return mid;
+        if (id < products[mid].id) rBound=mid-1;
+        else lBound=mid+1;
     }
+
     return -1;
 }
 
