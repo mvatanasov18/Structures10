@@ -13,8 +13,8 @@ struct PRODUCT {
 void exampleProducts(PRODUCT* product, int& productCount, int& maxId);
 void createOrder(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduct);
 void showAllIceCreams(PRODUCT* product, int& productCount);
-//void deleteProduct(PRODUCT* products, int& productCount, int id);
-//int findById(PRODUCT*, int&, int);
+void deleteProduct(PRODUCT* products, int& productCount, int id);
+int findById(PRODUCT*, int&, int);
 
 
 
@@ -79,32 +79,34 @@ void showAllIceCreams(PRODUCT* product, int& productCount) {
     }
 }
 
-//void deleteProduct(PRODUCT* products, int& productCount, int id)
-//{
-//    int delPos;
-//
-//
-//
-//    delPos = findById(products, productCount, id);
-//
-//
-//
-//    for (int i = delPos; i < productCount - 1; i++) {
-//        products[i] = products[i + 1];
-//    }
-//
-//
-//
-//    productCount--;
-//}
-//
-//int findById(PRODUCT* products, int& productCount, int id)
-//{
-//    for (int i = 0; i < productCount; i++) {    //TODO: change to bin search
-//        if (products[i].id == id) return i;
-//    }
-//    return -1;
-//}
+void deleteProduct(PRODUCT* products, int& productCount, int id)
+{
+    int delPos;
+
+    delPos = findById(products, productCount, id);
+
+    for (int i = delPos; i < productCount - 1; i++) {
+        products[i] = products[i + 1];
+    }
+
+    productCount--;
+}
+
+int findById(PRODUCT* products, int& productCount, int id)
+{
+    int lBound=0, rBound=productCount-1, mid=1, lastMid=0;
+
+    while (mid != lastMid) {
+        lastMid=mid;
+        mid=(lBound+rBound)/2;
+
+		if (id == products[mid].id) return mid;
+        if (id < products[mid].id) rBound=mid-1;
+        else lBound=mid+1;
+    }
+
+    return -1;
+}
 
 int main()
 {
