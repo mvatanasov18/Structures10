@@ -17,8 +17,6 @@ struct PRODUCT {
     int id = 0;
 };
 
-void createOrder(PRODUCT* product, int& productCount);
-
 void showAvailProd(PRODUCT* product, int& productCount);
 
 void clearExpiredProducts();
@@ -29,15 +27,16 @@ int findById(PRODUCT*, int&, int);
 void YesOrNoQuestion(string yesOrNo);
 int orderMenu();
 int orderAdditions();
-
+void flavoursMenu();
 bool showMenu(PRODUCT* product, int& productCount, int& maxId) {
     int userInput = 0;
     string yesOrNo = "";
     cout << "\nWelcome to the ice cream program : " << endl;
-    cout << "1. Stock the shop\n";
-    cout << "2. Order an ice cream\n";
-    cout << "3. Clear expired products\n";
-    cout << "4. Quit" << endl;
+    cout << "1. Stock the shop.\n";
+    cout << "2. Order an ice cream.\n";
+    cout << "3. Clear expired products.\n";
+    cout << "4. See what flavours you can choose from.\n";
+    cout << "5. Quit." << endl;
     cout << "\nEnter option from the menu by typing a number: ";
     cin >> userInput;
     switch (userInput)
@@ -47,7 +46,11 @@ bool showMenu(PRODUCT* product, int& productCount, int& maxId) {
         break;
 
     case 2: {
-
+        cout << "Do you to see what flavours you can choose from? (Y/N)\n";
+        cin >> yesOrNo;
+        if (yesOrNo == "Yes" or yesOrNo == "Y" or yesOrNo == "y" or yesOrNo == "yes") {
+            flavoursMenu();
+        }
             switch (orderMenu()) {
             case 1:
                 YesOrNoQuestion(yesOrNo);
@@ -73,7 +76,7 @@ bool showMenu(PRODUCT* product, int& productCount, int& maxId) {
         break;
 
     case 4:
-        deleteProduct(product, productCount, maxId);
+        
         break;
 
     case 5: return false;
@@ -107,7 +110,16 @@ int orderAdditions() {
 
     return 1;
 }
-
+void flavoursMenu() {
+    cout << "1. Strawberry\t price: 0.60lv\n";
+    cout << "2. Chocolate\t price: 0.70lv\n";
+    cout << "4. Vanilia\t price: 0.70lv\n";
+    cout << "5. Lemon\t price: 0.80lv\n";
+    cout << "6. Melon\t price 0.70lv\n";
+    cout << "7. Raspberry\t price 0.60lv\n";
+    cout << "8. Bluberry\t price 0.70lv\n";
+    cout<<"The price is for only one ball of ice cream.\n"
+}
 void showAvailProd(PRODUCT* product, int& productCount) {
     cout << "The list of the entered products: " << endl;
     for (int i = 0; i < productCount; i++)
