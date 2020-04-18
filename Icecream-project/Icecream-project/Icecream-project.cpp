@@ -2,19 +2,19 @@
 using namespace std;
 
 struct PERSON {
-    string firstName="";
-    string lastName="";
-    int years=0;
+    string firstName = "";
+    string lastName = "";
+    int years = 0;
 };
 
 struct PRODUCT {
-    string brand="";
-    string flavour="";
-    float price=0;
-    int quantity=0;
-    int expDate=0;
+    string brand = "";
+    string flavour = "";
+    float price = 0;
+    int quantity = 0;
+    int expDate = 0;
     PERSON person;
-    int id;
+    int id = 0;
 };
 
 void createOrder(PRODUCT* product, int& productCount);
@@ -26,61 +26,86 @@ void clearExpiredProducts();
 void deleteProduct(PRODUCT* products, int& productCount, int id);
 
 int findById(PRODUCT*, int&, int);
+void YesOrNoQuestion(string yesOrNo);
+int orderMenu();
+int orderAdditions();
 
-bool showMenu(PRODUCT* product,int& productCount, int &maxId) {
-    int userInput;
-    cout << "\nWelcome to our programme about icecream: " << endl;
-    cout << "1. Create a new order" << endl;
-    cout << "2. Show the entered stuff" << endl;
-    cout << "3. Clear expired products" << endl;
-    cout << "4. Buy product" << endl;
-    cout << "5. Quit" << endl;
-    cout << "Enter option from the menu by typing a number: ";
+bool showMenu(PRODUCT* product, int& productCount, int& maxId) {
+    int userInput = 0;
+    string yesOrNo = "";
+    cout << "\nWelcome to the ice cream program : " << endl;
+    cout << "1. Stock the shop\n";
+    cout << "2. Order an ice cream\n";
+    cout << "3. Clear expired products\n";
+    cout << "4. Quit" << endl;
+    cout << "\nEnter option from the menu by typing a number: ";
     cin >> userInput;
     switch (userInput)
     {
     case 1:
-        createOrder(product, productCount);
+        //in need for ideas
         break;
-    case 2:
-        showAvailProd(product, productCount);
-        break;
+
+    case 2: {
+
+            switch (orderMenu()) {
+            case 1:
+                YesOrNoQuestion(yesOrNo);
+                break;
+            case 2:
+                YesOrNoQuestion(yesOrNo);
+                break;
+            case 3:
+                YesOrNoQuestion(yesOrNo);
+                break;
+            case 4:
+                YesOrNoQuestion(yesOrNo);
+                break;
+            case 5:
+                break;
+            }
+
+            break;
+    }
+
     case 3:
         clearExpiredProducts();
         break;
+
     case 4:
-        deleteProduct(product, productCount, id);
+        deleteProduct(product, productCount, maxId);
         break;
+
     case 5: return false;
     }
     return true;
 }
 
-void createOrder(PRODUCT* product, int& productCount) {
-    cout << "Enter brand: ";
-    cin >> product[productCount].brand;
+void YesOrNoQuestion(string yesOrNo) {
+    cout << "Do you want any additions to your ice cream? Yes/No (Y/N)";
+    cin >> yesOrNo;
+    if (yesOrNo == "Yes" or yesOrNo == "Y" or yesOrNo == "y" or yesOrNo == "yes") {
+        orderAdditions();
+    }
+}
 
-    cout << "Enter flavour: ";
-    cin >> product[productCount].flavour;
+int orderMenu() {
+    int userOption;
+    cout << "\nHere are some suggested ice cream masterpieces:\n";
+    cout << "1. Chocolate strawberry\n- strawberry ice cream with chocolate filling\nPrice: 1.00 lv\n";
+    cout << "2. Extra berry\n- strawberry, raspberry, bluberry and ice cream with strawberry and bluberry filling\nPrice: 2.80 lv\n";
+    cout << "3. Biscuitino\n- biscuits, chocolate and vanilia ice cream\nPrice: 2.00 lv\n";
+    cout << "4. Chocolate lover\n- chocolate, chocolate ice cream, chocolate liquor\nPrice: 2.30 lv\n";
+    cout << "5. Or make your own ice cream\n";
+    cout << "\nEnter option by typing a number: ";
+    cin >> userOption;
 
-    cout << "Enter price: ";
-    cin >> product[productCount].price;
+    return userOption;
+}
 
-    cout << "Enter quantity: ";
-    cin >> product[productCount].quantity;
+int orderAdditions() {
 
-    cout << "Enter expDate: ";
-    cin >> product[productCount].expDate;
-
-    cout << "Enter your firstname: ";
-    cin >> product[productCount].person.firstName;
-
-    cout << "Enter your lastname: ";
-    cin >> product[productCount].person.lastName;
-
-    cout << "Enter your years: ";
-    cin >> product[productCount].person.years;
-
+    return 1;
 }
 
 void showAvailProd(PRODUCT* product, int& productCount) {
@@ -92,17 +117,17 @@ void showAvailProd(PRODUCT* product, int& productCount) {
 }
 
 void clearExpiredProducts() {
-    
+
 }
 
-void deleteProduct(PRODUCT *products, int &productCount, int id)
+void deleteProduct(PRODUCT* products, int& productCount, int id)
 {
     int delPos;
 
-    delPos=findById(products, productCount, id);
+    delPos = findById(products, productCount, id);
 
-    for (int i = delPos; i < productCount-1; i++) {
-        products[i]=products[i+1];
+    for (int i = delPos; i < productCount - 1; i++) {
+        products[i] = products[i + 1];
     }
 
     productCount--;
@@ -110,15 +135,15 @@ void deleteProduct(PRODUCT *products, int &productCount, int id)
 
 int findById(PRODUCT* products, int& productCount, int id)
 {
-    int lBound=0, rBound=productCount-1, mid=1, lastMid=0;
+    int lBound = 0, rBound = productCount - 1, mid = 1, lastMid = 0;
 
     while (mid != lastMid) {
-        lastMid=mid;
-        mid=(lBound+rBound)/2;
+        lastMid = mid;
+        mid = (lBound + rBound) / 2;
 
-		if (id == products[mid].id) return mid;
-        if (id < products[mid].id) rBound=mid-1;
-        else lBound=mid+1;
+        if (id == products[mid].id) return mid;
+        if (id < products[mid].id) rBound = mid - 1;
+        else lBound = mid + 1;
     }
 
     return -1;
@@ -127,6 +152,6 @@ int findById(PRODUCT* products, int& productCount, int id)
 int main()
 {
     PRODUCT product[100];
-    int productCount = 0, maxId=1;
-    while(showMenu(product, productCount, maxId));
+    int productCount = 0, maxId = 1;
+    while (showMenu(product, productCount, maxId));
 }
