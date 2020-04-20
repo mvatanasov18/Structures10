@@ -155,6 +155,16 @@ bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* pos
     return true;
 }
 
+void showInitialGreeting()
+{
+    cout<<"\n      Interoperable Console - Entrepreneur's Choice for Restocking, Evaluation and Maintenance\n";
+    cout<<"                                             /ICECREAM/\n\n";
+    cout<<"  Welcome to the ICECREAM.\n";
+    cout<<"  Thank you for choosing our software!\n";
+    cout<<"  Please refer to the Documentation for a more detailed explanation about using the program.\n";
+    cout<<"  The Galaxy Team takes no responsibility for misuse of the ICECREAM.\n\n";
+}
+
 int main()
 {
     PRODUCT product[100];
@@ -166,5 +176,8 @@ int main()
     initFlavours(possibleFlavours, flavourCount);
     initContainers(possibleContainers, containerCount);
     exampleProducts(product, productCount, maxId,  possibleFlavours, flavourCount,  possibleContainers, containerCount);
+
+    showInitialGreeting();
+
     while (showMenu(product, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount));
 }
