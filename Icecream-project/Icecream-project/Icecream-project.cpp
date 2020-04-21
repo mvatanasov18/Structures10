@@ -1,16 +1,25 @@
 ﻿#include <iostream>
 using namespace std;
 
+struct FLAVOUR_TYPE {
+    string type="";
+    float pricePerKg = 0;
+};
+
+struct CONTAINER {
+    string type = "";
+    int capacity = 0;
+};
+
 struct PRODUCT {
-    string flavour = "";
-    string cone = "";
+    FLAVOUR_TYPE flavour;
+    CONTAINER container;
     float price = 0;
-    int balls = 0;
     int id = 0;
 };
 
-
-void exampleProducts(PRODUCT* product, int& productCount, int& maxId);
+void exampleProducts(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount);
+void createOrderMenu(PRODUCT* product, int& productCount, int& maxId);
 void createOrder(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduct);
 void showAllIceCreams(PRODUCT* product, int& productCount);
 void deleteProduct(PRODUCT* products, int& productCount, int id);
@@ -33,13 +42,31 @@ int findById(PRODUCT* products, int& productCount, int id)
 }
 /*===================================DATA LAYER===================================*/
 
+void initFlavours(FLAVOUR_TYPE * possibleFlavours, int& flavourCount) {
+    possibleFlavours[0] = { "Chocolate",4.00 };
+    possibleFlavours[1] = { "Strawberry",3.00 };
+    possibleFlavours[2] = { "Vanilia",3.20 };
+    possibleFlavours[3] = { "Melon",3.60 };
+    possibleFlavours[4] = { "Lemon",2.90 };
+    possibleFlavours[5] = { "Cactus",4.20 };
+    flavourCount = 6;
+}
 
-void exampleProducts(PRODUCT* product, int& productCount, int& maxId) {
-    createOrder(product, productCount, maxId, { "strawberry","sugar cone",1.00,1,0 });
-    createOrder(product, productCount, maxId, { "chocolate","waffle cone",1.10,2,1 });
-    createOrder(product, productCount, maxId, { "vanilia","cup",2.10,4,2 });
-    createOrder(product, productCount, maxId, { "melon","waffle cone",1,1,3 });
-    createOrder(product, productCount, maxId, { "lemon","cup",2.40,3,4 });
+void initContainers(CONTAINER* possibleContainers, int& containerCount) {
+    possibleContainers[0] = { "sugar cone",50 };
+    possibleContainers[1] = { "waffle cone",100 };
+    possibleContainers[2] = { "Small cup",150 };
+    possibleContainers[3] = { "Medium cup",200 };
+    possibleContainers[4] = { "Large cup",250 };
+    containerCount = 5;
+}
+
+void exampleProducts(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
+    createOrder(product, productCount, maxId, { possibleFlavours[1],possibleContainers[0],0,0});
+    createOrder(product, productCount, maxId, { possibleFlavours[0],possibleContainers[1],0,0 });
+    createOrder(product, productCount, maxId, { possibleFlavours[2],possibleContainers[2],0,0 });
+    createOrder(product, productCount, maxId, { possibleFlavours[3],possibleContainers[1],0,0 });
+    createOrder(product, productCount, maxId, { possibleFlavours[5],possibleContainers[4],0,0 });
 }
 
 void createOrder(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduct) {
@@ -54,28 +81,30 @@ void showAllIceCreams(PRODUCT* product, int& productCount) {
 
     for (int i = 0; i < productCount; i++) {
         cout << "Ice cream flavour: ";
-        cout << product[i].flavour << endl;
+        cout << product[i].flavour.type << endl;
         cout << "Ice cream cone: ";
-        cout << product[i].cone << endl;
+        cout << product[i].container.type << endl;
         cout << "price: ";
         cout << product[i].price << " lv" << endl;
-        cout << "Balls of ice cream: ";
-        cout << product[i].balls << endl;
         cout << endl;
     }
 }
 
-void createOrderMenu(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduct)
+//void showFlavours() {
+//    cout << "Strawberry\n";
+//    cout << "Chocolate\n";
+//    cout << "Strawberry\n";
+//}
+
+void createOrderMenu(PRODUCT* product, int& productCount, int& maxId)
 {
+    PRODUCT newProduct;
     cout << "Ice cream flavour: ";
-    cin >> newProduct.flavour;
+
+    /*cin >> newProduct.flavour;
     cout << "Ice cream cone: ";
-    cin >> newProduct.cone;
-    cout << "price: ";
-    cin >> newProduct.price;
-    cout << "Balls of ice cream: ";
-    cin >> newProduct.balls;
-    cout << endl;
+    cin >> newProduct.cone;*/
+   
 
     createOrder(product, productCount, maxId, newProduct);
 }
@@ -95,7 +124,7 @@ void deleteProduct(PRODUCT* products, int& productCount, int id)
 
 
 
-bool showMenu(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduct) {
+bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
 
     int userInput;
     cout << "\nWelcome to our programme about icecream: " << endl;
@@ -112,10 +141,11 @@ bool showMenu(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduc
         showAllIceCreams(product, productCount);
         break;
     case 2:
-        createOrderMenu(product, productCount, maxId, newProduct);
+        createOrderMenu(product, productCount, maxId);
         break;
     case 3:
 
+        deleteProduct(product, productCount,maxId);
         break;
     case 4:
 
@@ -128,9 +158,13 @@ bool showMenu(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduc
 int main()
 {
     PRODUCT product[100];
+    CONTAINER possibleContainers[100];
+    FLAVOUR_TYPE possibleFlavours[100];
     int productCount = 0, maxId = 1;
-    PRODUCT newProduct;
-    exampleProducts(product, productCount, maxId);
-
-    while (showMenu(product, productCount, maxId, newProduct));
+    int containerCount = 0, flavourCount = 0;
+    
+    initFlavours(possibleFlavours, flavourCount);
+    initContainers(possibleContainers, containerCount);
+    exampleProducts(product, productCount, maxId,  possibleFlavours, flavourCount,  possibleContainers, containerCount);
+    while (showMenu(product, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount));
 }
