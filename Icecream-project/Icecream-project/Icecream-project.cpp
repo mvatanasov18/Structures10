@@ -25,6 +25,8 @@ void showAllIceCreams(PRODUCT* product, int& productCount);
 void deleteProduct(PRODUCT* products, int& productCount, int id);
 int findById(PRODUCT*, int&, int);
 
+/*===================================DATA LAYER===================================*/
+
 int findById(PRODUCT* products, int& productCount, int id)
 {
     int lBound = 0, rBound = productCount - 1, mid = 1, lastMid = 0;
@@ -40,7 +42,19 @@ int findById(PRODUCT* products, int& productCount, int id)
 
     return -1;
 }
-/*===================================DATA LAYER===================================*/
+
+void deleteProduct(PRODUCT* products, int& productCount, int id)
+{
+    int delPos;
+
+    delPos = findById(products, productCount, id);
+
+    for (int i = delPos; i < productCount - 1; i++) {
+        products[i] = products[i + 1];
+    }
+
+    productCount--;
+}
 
 void initFlavours(FLAVOUR_TYPE * possibleFlavours, int& flavourCount) {
     possibleFlavours[0] = { "Chocolate",4.00 };
@@ -108,21 +122,6 @@ void createOrderMenu(PRODUCT* product, int& productCount, int& maxId)
 
     createOrder(product, productCount, maxId, newProduct);
 }
-
-void deleteProduct(PRODUCT* products, int& productCount, int id)
-{
-    int delPos;
-
-    delPos = findById(products, productCount, id);
-
-    for (int i = delPos; i < productCount - 1; i++) {
-        products[i] = products[i + 1];
-    }
-
-    productCount--;
-}
-
-
 
 bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
 
