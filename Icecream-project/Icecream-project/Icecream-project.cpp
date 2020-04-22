@@ -68,9 +68,15 @@ void initContainers(CONTAINER* possibleContainers, int& containerCount) {
     containerCount = 5;
 }
 
+void calculateProductPrice(PRODUCT* product)
+{
+	product->price = (float)product->container.capacity / 1000 * product->flavour.pricePerKg;
+}
+
 void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newProduct) {
     products[productCount].id = maxId++;
     products[productCount] = newProduct;
+    calculateProductPrice(products + productCount);
     productCount++;
 }
 
