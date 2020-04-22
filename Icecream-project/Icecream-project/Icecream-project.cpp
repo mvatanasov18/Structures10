@@ -103,17 +103,22 @@ void showAllIceCreams(PRODUCT* product, int& productCount) {
     }
 }
 
-//void showFlavours() {
-//    cout << "Strawberry\n";
-//    cout << "Chocolate\n";
-//    cout << "Strawberry\n";
-//}
+void showFlavours() {
+    cout << "Ice cream flavours: \n";
+    cout << "Strawberry\n";
+    cout << "Chocolate\n";
+    cout << "Strawberry\n";
+    cout << "Vanilia\n";
+    cout << "Melon\n";
+    cout << "Cactus\n";
+    cout << "Lemon\n";
+}
 
 void createOrderMenu(PRODUCT* product, int& productCount, int& maxId)
 {
     PRODUCT newProduct;
-    cout << "Ice cream flavour: ";
-
+    
+    showFlavours();
     /*cin >> newProduct.flavour;
     cout << "Ice cream cone: ";
     cin >> newProduct.cone;*/
@@ -125,7 +130,6 @@ void createOrderMenu(PRODUCT* product, int& productCount, int& maxId)
 bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
 
     int userInput;
-    cout << "\nWelcome to our programme about icecream: " << endl;
     cout << "1. See all ice creams" << endl;
     cout << "2. Create new order" << endl;
     cout << "3. Delete order" << endl;
