@@ -18,13 +18,6 @@ struct PRODUCT {
     int id = 0;
 };
 
-void exampleProducts(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount);
-void createOrderMenu(PRODUCT* product, int& productCount, int& maxId);
-void createOrder(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduct);
-void showAllIceCreams(PRODUCT* product, int& productCount);
-void deleteProduct(PRODUCT* products, int& productCount, int id);
-int findById(PRODUCT*, int&, int);
-
 /*===================================DATA LAYER===================================*/
 
 int findById(PRODUCT* products, int& productCount, int id)
@@ -75,18 +68,18 @@ void initContainers(CONTAINER* possibleContainers, int& containerCount) {
     containerCount = 5;
 }
 
+void createOrder(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduct) {
+    product[productCount].id = maxId++;
+    product[productCount] = newProduct;
+    productCount++;
+}
+
 void exampleProducts(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
     createOrder(product, productCount, maxId, { possibleFlavours[1],possibleContainers[0],0,0});
     createOrder(product, productCount, maxId, { possibleFlavours[0],possibleContainers[1],0,0 });
     createOrder(product, productCount, maxId, { possibleFlavours[2],possibleContainers[2],0,0 });
     createOrder(product, productCount, maxId, { possibleFlavours[3],possibleContainers[1],0,0 });
     createOrder(product, productCount, maxId, { possibleFlavours[5],possibleContainers[4],0,0 });
-}
-
-void createOrder(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduct) {
-    product[productCount].id = maxId++;
-    product[productCount] = newProduct;
-    productCount++;
 }
 
 /*===================================PRESENTATION LAYER===================================*/
