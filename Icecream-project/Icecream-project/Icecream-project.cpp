@@ -50,12 +50,12 @@ void deleteProduct(PRODUCT* products, int& productCount, int id)
 }
 
 void initFlavours(FLAVOUR_TYPE * possibleFlavours, int& flavourCount) {
-    possibleFlavours[0] = { "Chocolate",4.00 };
-    possibleFlavours[1] = { "Strawberry",3.00 };
-    possibleFlavours[2] = { "Vanilia",3.20 };
-    possibleFlavours[3] = { "Melon",3.60 };
-    possibleFlavours[4] = { "Lemon",2.90 };
-    possibleFlavours[5] = { "Cactus",4.20 };
+    possibleFlavours[0] = { "Chocolate",21.00 };
+    possibleFlavours[1] = { "Strawberry",20.00 };
+    possibleFlavours[2] = { "Vanilia",22.20 };
+    possibleFlavours[3] = { "Melon",19.60 };
+    possibleFlavours[4] = { "Lemon",20.90 };
+    possibleFlavours[5] = { "Cactus",24.20 };
     flavourCount = 6;
 }
 
@@ -74,14 +74,14 @@ void calculateProductPrice(PRODUCT* product)
 }
 
 void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newProduct) {
-    products[productCount].id = maxId++;
     products[productCount] = newProduct;
+    products[productCount].id = maxId++;
     calculateProductPrice(products + productCount);
     productCount++;
 }
 
 void exampleProducts(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
-    createOrder(product, productCount, maxId, { possibleFlavours[1],possibleContainers[0],0,0});
+    createOrder(product, productCount, maxId, { possibleFlavours[1],possibleContainers[0],0,0});//flavour   container  price  id
     createOrder(product, productCount, maxId, { possibleFlavours[0],possibleContainers[1],0,0 });
     createOrder(product, productCount, maxId, { possibleFlavours[2],possibleContainers[2],0,0 });
     createOrder(product, productCount, maxId, { possibleFlavours[3],possibleContainers[1],0,0 });
@@ -99,8 +99,18 @@ void showAllIceCreams(PRODUCT* product, int& productCount) {
         cout << product[i].container.type << endl;
         cout << "price: ";
         cout << product[i].price << " lv" << endl;
+        cout << "ID: ";
+        cout << product[i].id << endl;
         cout << endl;
     }
+}
+
+void showDeleteMenu(PRODUCT* product, int& productCount) {
+    int chosenId;
+    showAllIceCreams(product, productCount);
+    cout << "Enter the ID of the order that you want to delete: ";
+    cin >> chosenId;
+    deleteProduct(product, productCount, chosenId);
 }
 
 void showFlavours() {
@@ -155,9 +165,8 @@ void createOrderMenu(PRODUCT* product, int& productCount, int& maxId)
     default:
         break;
     }
- 
 
-    createOrder(product, productCount, maxId, newProduct);
+     createOrder(product, productCount, maxId, newProduct);
 }
 
 bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
@@ -179,8 +188,7 @@ bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* pos
         createOrderMenu(product, productCount, maxId);
         break;
     case 3:
-
-        deleteProduct(product, productCount,maxId);
+        showDeleteMenu(product, productCount);   
         break;
     case 4:
 
