@@ -68,9 +68,9 @@ void initContainers(CONTAINER* possibleContainers, int& containerCount) {
     containerCount = 5;
 }
 
-void createOrder(PRODUCT* product, int& productCount, int& maxId, PRODUCT newProduct) {
-    product[productCount].id = maxId++;
-    product[productCount] = newProduct;
+void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newProduct) {
+    products[productCount].id = maxId++;
+    products[productCount] = newProduct;
     productCount++;
 }
 
