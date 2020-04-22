@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+
 using namespace std;
 
 struct FLAVOUR_TYPE {
@@ -16,6 +17,7 @@ struct PRODUCT {
     CONTAINER container;
     float price = 0;
     int id = 0;
+
 };
 
 /*===================================DATA LAYER===================================*/
@@ -115,12 +117,12 @@ void showDeleteMenu(PRODUCT* product, int& productCount) {
 
 void showFlavours() {
     cout << "\nIce cream flavours: \n";
-    cout << "1. Strawberry\n";
-    cout << "2. Chocolate\n";
+    cout << "1. Chocolate\n";
+    cout << "2. Strawberry\n";
     cout << "3. Vanilia\n";
     cout << "4. Melon\n";
-    cout << "5. Cactus\n";
-    cout << "6. Lemon\n";
+    cout << "5. Lemon\n";
+    cout << "6. Cactus\n";
     cout << "Enter the flavour's number: ";
 }
 
@@ -134,45 +136,55 @@ void showCones() {
     cout << "Enter the cone's number: ";
 }
 
-void createOrderMenu(PRODUCT* product, int& productCount, int& maxId)
+void enterFlavour(FLAVOUR_TYPE* possibleFlavours, PRODUCT* newProduct,int choose) {
+    
+    cin >> choose;
+    newProduct->flavour = possibleFlavours[choose - 1];
+}
+
+void createOrderMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount)
 {
     PRODUCT newProduct;
     int option;
-    showFlavours();
-    int choose=0;
-    cin >> choose;
-    switch (choose)
-    {
-    case 1: newProduct.flavour.type = "Strawberry"; break;
-    case 2:newProduct.flavour.type = "Chocolate"; break;
-    case 3:newProduct.flavour.type = "Vanilia"; break;
-    case 4:newProduct.flavour.type = "Melon"; break;
-    case 5:newProduct.flavour.type = "Cactus"; break;
-    case 6:newProduct.flavour.type = "Lemon"; break;
-    default:
-        break;
-    }
+    int choose = 0;
+    showFlavours(); 
+    enterFlavour(possibleFlavours, &newProduct, choose);
 
     showCones();
     cin >> choose;
-    switch (choose)
+    newProduct.container = possibleContainers[choose - 1];
+
+    createOrder(product, productCount, maxId, newProduct);
+}
+
+void showUpdateOrderMenu(PRODUCT* product, int& productCount, FLAVOUR_TYPE* possibleFlavours, CONTAINER* possibleContainers) {
+    int chosenId,chosenField;
+    showAllIceCreams(product, productCount);
+    cout << "Enter the ID of the order that you want to update: ";
+    cin>>chosenId;
+
+    cout << "1. Ice cream flavour: ";
+    cout << product[chosenId-1].flavour.type << endl;
+    cout << "2. Ice cream cone: ";
+    cout << product[chosenId - 1].container.type << endl;
+    cout << "price: ";
+    cout << product[chosenId - 1].price << " lv" << endl;
+    cout << endl;
+    cout << "Enter the field's number that you want to update:  ";
+    cin >> chosenField;
+    switch (chosenField)
     {
-    case 1: newProduct.container.type = "Sugar cone"; break;
-    case 2:newProduct.container.type = "Waffle cone"; break;
-    case 3:newProduct.container.type = "Small cup"; break;
-    case 4:newProduct.container.type = "Medium cup"; break;
-    case 5:newProduct.container.type = "Large cup"; break;
-    default:
+    case 1:enterFlavour(possibleFlavours );  break;
+    case 2:break;
+    default:cout << "Incorrect input!!!\n Please enter a valid input!!!\n";
         break;
     }
-
-     createOrder(product, productCount, maxId, newProduct);
 }
 
 bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
 
     int userInput;
-    cout << "1. See all ice creams" << endl;
+    cout << "\n1. See all ice creams" << endl;
     cout << "2. Create new order" << endl;
     cout << "3. Delete order" << endl;
     cout << "4. Update order" << endl;
@@ -185,13 +197,13 @@ bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* pos
         showAllIceCreams(product, productCount);
         break;
     case 2:
-        createOrderMenu(product, productCount, maxId);
+        createOrderMenu(product, productCount, maxId, possibleFlavours, flavourCount,  possibleContainers,  containerCount);
         break;
     case 3:
         showDeleteMenu(product, productCount);   
         break;
     case 4:
-
+        showUpdateOrderMenu(product, productCount, possibleFlavours, possibleContainers);
         break;
     case 5: return false;
     }
