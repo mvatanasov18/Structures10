@@ -104,25 +104,58 @@ void showAllIceCreams(PRODUCT* product, int& productCount) {
 }
 
 void showFlavours() {
-    cout << "Ice cream flavours: \n";
-    cout << "Strawberry\n";
-    cout << "Chocolate\n";
-    cout << "Strawberry\n";
-    cout << "Vanilia\n";
-    cout << "Melon\n";
-    cout << "Cactus\n";
-    cout << "Lemon\n";
+    cout << "\nIce cream flavours: \n";
+    cout << "1. Strawberry\n";
+    cout << "2. Chocolate\n";
+    cout << "3. Vanilia\n";
+    cout << "4. Melon\n";
+    cout << "5. Cactus\n";
+    cout << "6. Lemon\n";
+    cout << "Enter the flavour's number: ";
+}
+
+void showCones() {
+    cout << "\nIce cream cones: \n";
+    cout << "1. Sugar cone\n";
+    cout << "2. Waffle cone\n";
+    cout << "3. Small cup\n";
+    cout << "4. Medium cup\n";
+    cout << "5. Large cup\n";
+    cout << "Enter the cone's number: ";
 }
 
 void createOrderMenu(PRODUCT* product, int& productCount, int& maxId)
 {
     PRODUCT newProduct;
-    
+    int option;
     showFlavours();
-    /*cin >> newProduct.flavour;
-    cout << "Ice cream cone: ";
-    cin >> newProduct.cone;*/
-   
+    int choose=0;
+    cin >> choose;
+    switch (choose)
+    {
+    case 1: newProduct.flavour.type = "Strawberry"; break;
+    case 2:newProduct.flavour.type = "Chocolate"; break;
+    case 3:newProduct.flavour.type = "Vanilia"; break;
+    case 4:newProduct.flavour.type = "Melon"; break;
+    case 5:newProduct.flavour.type = "Cactus"; break;
+    case 6:newProduct.flavour.type = "Lemon"; break;
+    default:
+        break;
+    }
+
+    showCones();
+    cin >> choose;
+    switch (choose)
+    {
+    case 1: newProduct.container.type = "Sugar cone"; break;
+    case 2:newProduct.container.type = "Waffle cone"; break;
+    case 3:newProduct.container.type = "Small cup"; break;
+    case 4:newProduct.container.type = "Medium cup"; break;
+    case 5:newProduct.container.type = "Large cup"; break;
+    default:
+        break;
+    }
+ 
 
     createOrder(product, productCount, maxId, newProduct);
 }
