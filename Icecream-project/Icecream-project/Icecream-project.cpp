@@ -51,7 +51,7 @@ void deleteProduct(PRODUCT* products, int& productCount, int id)
     productCount--;
 }
 
-void initFlavours(FLAVOUR_TYPE * possibleFlavours, int& flavourCount) {
+void initExampleFlavours(FLAVOUR_TYPE * possibleFlavours, int& flavourCount) {
     possibleFlavours[0] = { "Chocolate",21.00 };
     possibleFlavours[1] = { "Strawberry",20.00 };
     possibleFlavours[2] = { "Vanilia",22.20 };
@@ -61,7 +61,7 @@ void initFlavours(FLAVOUR_TYPE * possibleFlavours, int& flavourCount) {
     flavourCount = 6;
 }
 
-void initContainers(CONTAINER* possibleContainers, int& containerCount) {
+void initExampleContainers(CONTAINER* possibleContainers, int& containerCount) {
     possibleContainers[0] = { "sugar cone",50 };
     possibleContainers[1] = { "waffle cone",100 };
     possibleContainers[2] = { "Small cup",150 };
@@ -82,37 +82,35 @@ void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newPr
     productCount++;
 }
 
-void exampleProducts(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
-    createOrder(product, productCount, maxId, { possibleFlavours[1],possibleContainers[0],0,0});//flavour   container  price  id
-    createOrder(product, productCount, maxId, { possibleFlavours[0],possibleContainers[1],0,0 });
-    createOrder(product, productCount, maxId, { possibleFlavours[2],possibleContainers[2],0,0 });
-    createOrder(product, productCount, maxId, { possibleFlavours[3],possibleContainers[1],0,0 });
-    createOrder(product, productCount, maxId, { possibleFlavours[5],possibleContainers[4],0,0 });
+void initExampleProducts(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
+    createOrder(products, productCount, maxId, { possibleFlavours[1],possibleContainers[0],0,0 });//flavour   container  price  id
+    createOrder(products, productCount, maxId, { possibleFlavours[0],possibleContainers[1],0,0 });
+    createOrder(products, productCount, maxId, { possibleFlavours[2],possibleContainers[2],0,0 });
+    createOrder(products, productCount, maxId, { possibleFlavours[3],possibleContainers[1],0,0 });
+    createOrder(products, productCount, maxId, { possibleFlavours[5],possibleContainers[4],0,0 });
 }
 
 /*===================================PRESENTATION LAYER===================================*/
-
-void showAllIceCreams(PRODUCT* product, int& productCount) {
-
+void showAllProducts(PRODUCT* products, int& productCount) {
     for (int i = 0; i < productCount; i++) {
         cout << "Ice cream flavour: ";
-        cout << product[i].flavour.type << endl;
+        cout << products[i].flavour.type << endl;
         cout << "Ice cream cone: ";
-        cout << product[i].container.type << endl;
+        cout << products[i].container.type << endl;
         cout << "price: ";
-        cout << product[i].price << " lv" << endl;
+        cout << products[i].price << " lv" << endl;
         cout << "ID: ";
-        cout << product[i].id << endl;
+        cout << products[i].id << endl;
         cout << endl;
     }
 }
 
-void showDeleteMenu(PRODUCT* product, int& productCount) {
+void showDeleteMenu(PRODUCT* products, int& productCount) {
     int chosenId;
-    showAllIceCreams(product, productCount);
+    showAllProducts(products, productCount);
     cout << "Enter the ID of the order that you want to delete: ";
     cin >> chosenId;
-    deleteProduct(product, productCount, chosenId);
+    deleteProduct(products, productCount, chosenId);
 }
 
 void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount) {
@@ -122,7 +120,7 @@ void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount) {
     }
 }
 
-void showCones(CONTAINER *possibleContainers, int containerCount) {
+void showContainers(CONTAINER *possibleContainers, int containerCount) {
     cout << "\nIce cream cones: \n";
     for (int i = 0; i < containerCount; i++) {
         cout<<i+1<<". "<<possibleContainers[i].type<<endl;
@@ -143,33 +141,33 @@ void enterContainer(CONTAINER* possibleContainers, PRODUCT* newProduct) {
     newProduct->container = possibleContainers[choice - 1];
 }
 
-void createOrderMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount)
+void createOrderMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount)
 {
     PRODUCT newProduct;
 
     showFlavours(possibleFlavours, flavourCount); 
     enterFlavour(possibleFlavours, &newProduct);
 
-    showCones(possibleContainers, containerCount);
+    showContainers(possibleContainers, containerCount);
     enterContainer(possibleContainers, &newProduct);
 
-    createOrder(product, productCount, maxId, newProduct);
+    createOrder(products, productCount, maxId, newProduct);
 }
 
-void showUpdateOrderMenu(PRODUCT* product, int& productCount, FLAVOUR_TYPE* possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount) {
+void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount) {
     int chosenId,chosenField, indexOfChoice;
-    showAllIceCreams(product, productCount);
+    showAllProducts(products, productCount);
     cout << "Enter the ID of the order that you want to update: ";
     cin>>chosenId;
 
-    indexOfChoice=findById(product, productCount, chosenId);
+    indexOfChoice=findById(products, productCount, chosenId);
 
     cout << "1. Ice cream flavour: ";
-    cout << product[indexOfChoice].flavour.type << endl;
+    cout << products[indexOfChoice].flavour.type << endl;
     cout << "2. Ice cream cone: ";
-    cout << product[indexOfChoice].container.type << endl;
-    cout << "price: ";
-    cout << product[indexOfChoice].price << " lv" << endl;
+    cout << products[indexOfChoice].container.type << endl;
+    cout << "Price: ";
+    cout << products[indexOfChoice].price << " lv" << endl;
     cout << endl;
     cout << "Enter the field's number that you want to update:  ";
     cin >> chosenField;
@@ -177,11 +175,11 @@ void showUpdateOrderMenu(PRODUCT* product, int& productCount, FLAVOUR_TYPE* poss
     {
     case 1:
         showFlavours(possibleFlavours, flavourCount);
-        enterFlavour(possibleFlavours, product+indexOfChoice);
+        enterFlavour(possibleFlavours, products+indexOfChoice);
         break;
     case 2:
-        showCones(possibleContainers, containerCount);
-        enterContainer(possibleContainers, product+indexOfChoice);
+        showContainers(possibleContainers, containerCount);
+        enterContainer(possibleContainers, products+indexOfChoice);
         break;
     default:
         cout << "Incorrect input!!!\n Please enter a valid input!!!\n";
@@ -189,7 +187,7 @@ void showUpdateOrderMenu(PRODUCT* product, int& productCount, FLAVOUR_TYPE* poss
     }
 }
 
-bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
+bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
 
     int userInput;
     cout << "\n1. See all ice creams" << endl;
@@ -202,16 +200,16 @@ bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* pos
     switch (userInput)
     {
     case 1:
-        showAllIceCreams(product, productCount);
+        showAllProducts(products, productCount);
         break;
     case 2:
-        createOrderMenu(product, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount);
+        createOrderMenu(products, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
     case 3:
-        showDeleteMenu(product, productCount);   
+        showDeleteMenu(products, productCount);   
         break;
     case 4:
-        showUpdateOrderMenu(product, productCount, possibleFlavours, flavourCount, possibleContainers, containerCount);
+        showUpdateOrderMenu(products, productCount, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
     case 5: return false;
     }
@@ -230,17 +228,17 @@ void showInitialGreeting()
 
 int main()
 {
-    PRODUCT product[100];
+    PRODUCT products[100];
     CONTAINER possibleContainers[100];
     FLAVOUR_TYPE possibleFlavours[100];
     int productCount = 0, maxId = 1;
     int containerCount = 0, flavourCount = 0;
     
-    initFlavours(possibleFlavours, flavourCount);
-    initContainers(possibleContainers, containerCount);
-    exampleProducts(product, productCount, maxId,  possibleFlavours, flavourCount,  possibleContainers, containerCount);
+    initExampleFlavours(possibleFlavours, flavourCount);
+    initExampleContainers(possibleContainers, containerCount);
+    initExampleProducts(products, productCount, maxId,  possibleFlavours, flavourCount,  possibleContainers, containerCount);
 
     showInitialGreeting();
 
-    while (showMenu(product, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount));
+    while (showMenu(products, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount));
 }
