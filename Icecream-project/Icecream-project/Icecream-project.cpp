@@ -161,7 +161,7 @@ bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* 
     }
     newProduct->container = possibleContainers[choice - 1];
 
-    return false;
+    return true;
 }
 
 void createOrderMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount)
