@@ -38,17 +38,20 @@ int findById(PRODUCT* products, int& productCount, int id)
     return -1;
 }
 
-void deleteProduct(PRODUCT* products, int& productCount, int id)
+bool deleteProduct(PRODUCT* products, int& productCount, int id)
 {
     int delPos;
 
     delPos = findById(products, productCount, id);
+    if (delPos==-1) return false;
 
     for (int i = delPos; i < productCount - 1; i++) {
         products[i] = products[i + 1];
     }
 
     productCount--;
+
+    return true;
 }
 
 void initExampleFlavours(FLAVOUR_TYPE * possibleFlavours, int& flavourCount) {
@@ -116,7 +119,7 @@ void showDeleteMenu(PRODUCT* products, int& productCount) {
     showAllProducts(products, productCount);
     cout << "Enter the ID of the order that you want to delete: ";
     cin >> chosenId;
-    deleteProduct(products, productCount, chosenId);
+    if(!deleteProduct(products, productCount, chosenId)) cout<<"Invalid ID!\n";
 }
 
 void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount) {
@@ -133,18 +136,32 @@ void showContainers(CONTAINER *possibleContainers, int containerCount) {
     }
 }
 
-void enterFlavour(FLAVOUR_TYPE* possibleFlavours, PRODUCT* newProduct) {
+bool enterFlavour(FLAVOUR_TYPE* possibleFlavours, int flavourCount, PRODUCT* newProduct) {
     int choice;
     cout<<"Enter the number of your choice: ";
     cin >> choice;
+
+    if (choice < 1 or choice >= flavourCount) {
+        cout<<"Invalid option!\n";
+        return false;;
+    }
     newProduct->flavour = possibleFlavours[choice - 1];
+
+    return true;
 }
 
-void enterContainer(CONTAINER* possibleContainers, PRODUCT* newProduct) {
+bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* newProduct) {
     int choice;
     cout<<"Enter the number of your choice: ";
     cin >> choice;
+
+    if (choice < 1 or choice >= containerCount) {
+        cout<<"Invalid option!\n";
+        return false;
+    }
     newProduct->container = possibleContainers[choice - 1];
+
+    return false;
 }
 
 void createOrderMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount)
@@ -152,10 +169,10 @@ void createOrderMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_T
     PRODUCT newProduct;
 
     showFlavours(possibleFlavours, flavourCount); 
-    enterFlavour(possibleFlavours, &newProduct);
+    if (!enterFlavour(possibleFlavours, flavourCount, &newProduct)) return;
 
     showContainers(possibleContainers, containerCount);
-    enterContainer(possibleContainers, &newProduct);
+    if (!enterContainer(possibleContainers, containerCount, &newProduct)) return;
 
     createOrder(products, productCount, maxId, newProduct);
 }
@@ -167,6 +184,10 @@ void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* pos
     cin>>chosenId;
 
     indexOfChoice=findById(products, productCount, chosenId);
+    if (indexOfChoice == -1) {
+        cout<<"Invalid ID!\n";
+        return;
+    }
 
     cout << "1. Ice cream flavour: ";
     cout << products[indexOfChoice].flavour.type << endl;
@@ -181,11 +202,11 @@ void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* pos
     {
     case 1:
         showFlavours(possibleFlavours, flavourCount);
-        enterFlavour(possibleFlavours, products+indexOfChoice);
+        enterFlavour(possibleFlavours, flavourCount, products+indexOfChoice);
         break;
     case 2:
         showContainers(possibleContainers, containerCount);
-        enterContainer(possibleContainers, products+indexOfChoice);
+        enterContainer(possibleContainers, containerCount, products+indexOfChoice);
         break;
     default:
         cout << "Incorrect input!!!\n Please enter a valid input!!!\n";
@@ -217,7 +238,7 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
     case 4:
         showUpdateOrderMenu(products, productCount, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
-    case 5: return false;
+    default: return false;
     }
     return true;
 }
