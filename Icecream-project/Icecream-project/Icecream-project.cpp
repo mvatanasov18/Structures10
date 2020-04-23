@@ -115,29 +115,22 @@ void showDeleteMenu(PRODUCT* product, int& productCount) {
     deleteProduct(product, productCount, chosenId);
 }
 
-void showFlavours() {
+void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount) {
     cout << "\nIce cream flavours: \n";
-    cout << "1. Chocolate\n";
-    cout << "2. Strawberry\n";
-    cout << "3. Vanilia\n";
-    cout << "4. Melon\n";
-    cout << "5. Lemon\n";
-    cout << "6. Cactus\n";
-    cout << "Enter the flavour's number: ";
+    for (int i = 0; i < flavourCount; i++) {
+        cout<<i+1<<". "<<possibleFlavours[i].type<<endl;
+    }
 }
 
-void showCones() {
+void showCones(CONTAINER *possibleContainers, int containerCount) {
     cout << "\nIce cream cones: \n";
-    cout << "1. Sugar cone\n";
-    cout << "2. Waffle cone\n";
-    cout << "3. Small cup\n";
-    cout << "4. Medium cup\n";
-    cout << "5. Large cup\n";
-    cout << "Enter the cone's number: ";
+    for (int i = 0; i < containerCount; i++) {
+        cout<<i+1<<". "<<possibleContainers[i].type<<endl;
+    }
 }
 
 void enterFlavour(FLAVOUR_TYPE* possibleFlavours, PRODUCT* newProduct,int choose) {
-    
+    cout<<"Enter the number of your choice: ";
     cin >> choose;
     newProduct->flavour = possibleFlavours[choose - 1];
 }
@@ -150,7 +143,6 @@ void createOrderMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TY
     showFlavours(); 
     enterFlavour(possibleFlavours, &newProduct, choose);
 
-    showCones();
     cin >> choose;
     newProduct.container = possibleContainers[choose - 1];
 
@@ -197,7 +189,7 @@ bool showMenu(PRODUCT* product, int& productCount, int& maxId, FLAVOUR_TYPE* pos
         showAllIceCreams(product, productCount);
         break;
     case 2:
-        createOrderMenu(product, productCount, maxId, possibleFlavours, flavourCount,  possibleContainers,  containerCount);
+        createOrderMenu(product, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
     case 3:
         showDeleteMenu(product, productCount);   
