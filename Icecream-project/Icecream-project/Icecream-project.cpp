@@ -91,17 +91,23 @@ void initExampleProducts(PRODUCT* products, int& productCount, int& maxId, FLAVO
 }
 
 /*===================================PRESENTATION LAYER===================================*/
+void showProduct(PRODUCT* product)
+{
+    cout << "ID: ";
+    cout << product->id << endl;
+    cout << "Ice cream flavour: ";
+    cout << product->flavour.type << endl;
+    cout << "Ice cream cone: ";
+    cout << product->container.type << endl;
+    cout << "Price: ";
+    cout << product->price << " lv" << endl;
+}
+
 void showAllProducts(PRODUCT* products, int& productCount) {
-    for (int i = 0; i < productCount; i++) {
-        cout << "Ice cream flavour: ";
-        cout << products[i].flavour.type << endl;
-        cout << "Ice cream cone: ";
-        cout << products[i].container.type << endl;
-        cout << "price: ";
-        cout << products[i].price << " lv" << endl;
-        cout << "ID: ";
-        cout << products[i].id << endl;
-        cout << endl;
+    showProduct(products);
+    for (int i = 1; i < productCount; i++) {
+        cout<<endl;
+        showProduct(products+i);
     }
 }
 
