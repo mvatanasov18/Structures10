@@ -141,7 +141,7 @@ bool enterFlavour(FLAVOUR_TYPE* possibleFlavours, int flavourCount, PRODUCT* new
     cout<<"Enter the number of your choice: ";
     cin >> choice;
 
-    if (choice < 1 or choice >= flavourCount) {
+    if (choice < 1 or choice > flavourCount) {
         cout<<"Invalid option!\n";
         return false;
     }
@@ -155,7 +155,7 @@ bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* 
     cout<<"Enter the number of your choice: ";
     cin >> choice;
 
-    if (choice < 1 or choice >= containerCount) {
+    if (choice < 1 or choice > containerCount) {
         cout<<"Invalid option!\n";
         return false;
     }
