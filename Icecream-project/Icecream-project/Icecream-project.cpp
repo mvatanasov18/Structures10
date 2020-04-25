@@ -106,7 +106,7 @@ void showProduct(PRODUCT* product)
     cout << product->price << " lv" << endl;
 }
 
-void showAllProducts(PRODUCT* products, int& productCount) {
+void showAllProducts(PRODUCT* products, int productCount) {
     showProduct(products);
     for (int i = 1; i < productCount; i++) {
         cout<<endl;
@@ -143,7 +143,7 @@ bool enterFlavour(FLAVOUR_TYPE* possibleFlavours, int flavourCount, PRODUCT* new
 
     if (choice < 1 or choice >= flavourCount) {
         cout<<"Invalid option!\n";
-        return false;;
+        return false;
     }
     newProduct->flavour = possibleFlavours[choice - 1];
 
@@ -238,7 +238,9 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
     case 4:
         showUpdateOrderMenu(products, productCount, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
-    default: return false;
+    case 5:cout << "\nThanks for using our program!!!";
+        return false; break;
+    default: cout << "\nPlease enter a valid option!!!\n"; break;
     }
     return true;
 }
