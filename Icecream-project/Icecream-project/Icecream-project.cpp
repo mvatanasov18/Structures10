@@ -65,8 +65,8 @@ void initExampleFlavours(FLAVOUR_TYPE * possibleFlavours, int& flavourCount) {
 }
 
 void initExampleContainers(CONTAINER* possibleContainers, int& containerCount) {
-    possibleContainers[0] = { "sugar cone",50 };
-    possibleContainers[1] = { "waffle cone",100 };
+    possibleContainers[0] = { "Sugar cone",50 };
+    possibleContainers[1] = { "Waffle cone",100 };
     possibleContainers[2] = { "Small cup",150 };
     possibleContainers[3] = { "Medium cup",200 };
     possibleContainers[4] = { "Large cup",250 };
