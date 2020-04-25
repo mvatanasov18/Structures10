@@ -168,6 +168,8 @@ void createOrderMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_T
 {
     PRODUCT newProduct;
 
+    cout<<"\n----- Create Order -----\n";
+
     showFlavours(possibleFlavours, flavourCount); 
     if (!enterFlavour(possibleFlavours, flavourCount, &newProduct)) return;
 
@@ -179,6 +181,9 @@ void createOrderMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_T
 
 void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount) {
     int chosenId,chosenField, indexOfChoice;
+
+    cout<<"\n----- Update Order -----\n";
+
     showAllProducts(products, productCount);
     cout << "Enter the ID of the order that you want to update: ";
     cin>>chosenId;
@@ -217,6 +222,8 @@ void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* pos
 bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
 
     int userInput;
+
+    cout << "\n------- Main Menu -------\n";
     cout << "\n1. See all ice creams" << endl;
     cout << "2. Create new order" << endl;
     cout << "3. Delete order" << endl;
@@ -224,6 +231,7 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
     cout << "5. Quit" << endl;
     cout << "Enter option from the menu by typing a number: ";
     cin >> userInput;
+
     switch (userInput)
     {
     case 1:
