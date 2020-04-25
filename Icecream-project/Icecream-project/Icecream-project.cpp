@@ -238,9 +238,8 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
     case 4:
         showUpdateOrderMenu(products, productCount, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
-    case 5:cout << "\nThanks for using our program!!!";
-        return false; break;
-    default: cout << "\nPlease enter a valid option!!!\n"; break;
+    case 5: return false;
+    default: cout << "\nPlease enter a valid option!\n"; break;
     }
     return true;
 }
@@ -270,4 +269,6 @@ int main()
     showInitialGreeting();
 
     while (showMenu(products, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount));
+
+    cout<<"\nThank you for using the ICECREAM!\n";
 }
