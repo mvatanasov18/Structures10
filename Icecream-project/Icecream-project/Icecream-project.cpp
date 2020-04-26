@@ -264,6 +264,12 @@ void showInitialGreeting()
     cout<<"  The Galaxy Team takes no responsibility for misuse of the ICECREAM.\n\n";
 }
 
+void showGoodbyeMessage()
+{
+    cout<<"\n  Thank you for using the ICECREAM!\n\n";
+    cout<<"  Copyright (c) 2020 The Galaxy Team\n";;
+}
+
 int main()
 {
     PRODUCT products[100];
@@ -280,5 +286,5 @@ int main()
 
     while (showMenu(products, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount));
 
-    cout<<"\nThank you for using the ICECREAM!\n";
+    showGoodbyeMessage();
 }
