@@ -13,8 +13,8 @@ struct CONTAINER {
 };
 
 struct PRODUCT {
-    FLAVOUR_TYPE flavour;
-    CONTAINER container;
+    FLAVOUR_TYPE *flavour;
+    CONTAINER *container;
     float price = 0;
     int id = 0;
 
@@ -75,7 +75,7 @@ void initExampleContainers(CONTAINER* possibleContainers, int& containerCount) {
 
 void calculateProductPrice(PRODUCT* product)
 {
-	product->price = (float)product->container.capacity / 1000 * product->flavour.pricePerKg;
+	product->price = (float)product->container->capacity / 1000 * product->flavour->pricePerKg;
 }
 
 void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newProduct) {
@@ -86,11 +86,11 @@ void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newPr
 }
 
 void initExampleProducts(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
-    createOrder(products, productCount, maxId, { possibleFlavours[1],possibleContainers[0],0,0 });//flavour   container  price  id
-    createOrder(products, productCount, maxId, { possibleFlavours[0],possibleContainers[1],0,0 });
-    createOrder(products, productCount, maxId, { possibleFlavours[2],possibleContainers[2],0,0 });
-    createOrder(products, productCount, maxId, { possibleFlavours[3],possibleContainers[1],0,0 });
-    createOrder(products, productCount, maxId, { possibleFlavours[5],possibleContainers[4],0,0 });
+    createOrder(products, productCount, maxId, { possibleFlavours+1, possibleContainers+0, 0,0 });  //flavour   container   price   id
+    createOrder(products, productCount, maxId, { possibleFlavours+0, possibleContainers+1, 0,0 });
+    createOrder(products, productCount, maxId, { possibleFlavours+2, possibleContainers+2, 0,0 });
+    createOrder(products, productCount, maxId, { possibleFlavours+3, possibleContainers+1, 0,0 });
+    createOrder(products, productCount, maxId, { possibleFlavours+5, possibleContainers+4, 0,0 });
 }
 
 /*===================================PRESENTATION LAYER===================================*/
@@ -99,9 +99,9 @@ void showProduct(PRODUCT* product)
     cout << "ID: ";
     cout << product->id << endl;
     cout << "Ice cream flavour: ";
-    cout << product->flavour.type << endl;
+    cout << product->flavour->type << endl;
     cout << "Ice cream cone: ";
-    cout << product->container.type << endl;
+    cout << product->container->type << endl;
     cout << "Price: ";
     cout << product->price << " lv" << endl;
 }
@@ -145,7 +145,7 @@ bool enterFlavour(FLAVOUR_TYPE* possibleFlavours, int flavourCount, PRODUCT* new
         cout<<"Invalid option!\n";
         return false;
     }
-    newProduct->flavour = possibleFlavours[choice - 1];
+    newProduct->flavour = possibleFlavours + choice - 1;
 
     return true;
 }
@@ -159,7 +159,7 @@ bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* 
         cout<<"Invalid option!\n";
         return false;
     }
-    newProduct->container = possibleContainers[choice - 1];
+    newProduct->container = possibleContainers + choice - 1;
 
     return true;
 }
@@ -195,9 +195,9 @@ void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* pos
     }
 
     cout << "1. Ice cream flavour: ";
-    cout << products[indexOfChoice].flavour.type << endl;
+    cout << products[indexOfChoice].flavour->type << endl;
     cout << "2. Ice cream cone: ";
-    cout << products[indexOfChoice].container.type << endl;
+    cout << products[indexOfChoice].container->type << endl;
     cout << "Price: ";
     cout << products[indexOfChoice].price << " lv" << endl;
     cout << endl;
