@@ -217,6 +217,8 @@ void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* pos
         cout << "Incorrect input!!!\n Please enter a valid input!!!\n";
         break;
     }
+
+    calculateProductPrice(products+indexOfChoice);
 }
 
 bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
