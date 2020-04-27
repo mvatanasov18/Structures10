@@ -5,16 +5,18 @@ using namespace std;
 struct FLAVOUR_TYPE {
     string type="";
     float pricePerKg = 0;
+    int remaining=0;
 };
 
 struct CONTAINER {
     string type = "";
     int capacity = 0;
+    int remaining=0;
 };
 
 struct PRODUCT {
-    FLAVOUR_TYPE *flavour;
-    CONTAINER *container;
+    FLAVOUR_TYPE *flavour=nullptr;
+    CONTAINER *container=nullptr;
     float price = 0;
     int id = 0;
 
@@ -55,21 +57,21 @@ bool deleteProduct(PRODUCT* products, int& productCount, int id)
 }
 
 void initExampleFlavours(FLAVOUR_TYPE * possibleFlavours, int& flavourCount) {
-    possibleFlavours[0] = { "Chocolate",21.00 };
-    possibleFlavours[1] = { "Strawberry",20.00 };
-    possibleFlavours[2] = { "Vanilia",22.20 };
-    possibleFlavours[3] = { "Melon",19.60 };
-    possibleFlavours[4] = { "Lemon",20.90 };
-    possibleFlavours[5] = { "Cactus",24.20 };
+    possibleFlavours[0] = { "Chocolate", 21.00, 2000 };
+    possibleFlavours[1] = { "Strawberry", 20.00, 2500 };
+    possibleFlavours[2] = { "Vanilia", 22.20, 1800 };
+    possibleFlavours[3] = { "Melon", 19.60, 1300 };
+    possibleFlavours[4] = { "Lemon", 20.90, 1000 };
+    possibleFlavours[5] = { "Cactus", 24.20, 1100 };
     flavourCount = 6;
 }
 
 void initExampleContainers(CONTAINER* possibleContainers, int& containerCount) {
-    possibleContainers[0] = { "Sugar cone",50 };
-    possibleContainers[1] = { "Waffle cone",100 };
-    possibleContainers[2] = { "Small cup",150 };
-    possibleContainers[3] = { "Medium cup",200 };
-    possibleContainers[4] = { "Large cup",250 };
+    possibleContainers[0] = { "Sugar cone", 50, 70 };
+    possibleContainers[1] = { "Waffle cone", 100, 100 };
+    possibleContainers[2] = { "Small cup", 150, 40 };
+    possibleContainers[3] = { "Medium cup", 200, 15 };
+    possibleContainers[4] = { "Large cup", 250, 20 };
     containerCount = 5;
 }
 
@@ -83,6 +85,9 @@ void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newPr
     products[productCount].id = maxId++;
     calculateProductPrice(products + productCount);
     productCount++;
+
+    newProduct.flavour->remaining-=newProduct.container->capacity;
+    newProduct.container->remaining--;
 }
 
 void initExampleProducts(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
@@ -122,11 +127,39 @@ void showDeleteMenu(PRODUCT* products, int& productCount) {
     if(!deleteProduct(products, productCount, chosenId)) cout<<"Invalid ID!\n";
 }
 
+bool showFlavour(FLAVOUR_TYPE *flavour, int maxQuantityToShow)
+{
+    if (flavour->remaining>maxQuantityToShow and maxQuantityToShow!=0) return false;
+    
+    cout<<flavour->type<<" ("<<flavour->pricePerKg<<" lv/kg): "<<flavour->remaining<<" g\n";
+    return true;
+}
+
 void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount) {
     cout << "\nIce cream flavours: \n";
     for (int i = 0; i < flavourCount; i++) {
         cout<<i+1<<". "<<possibleFlavours[i].type<<endl;
     }
+}
+
+void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount, int maxQuantityToShow)
+{
+    bool check=false;
+
+    cout << "\nCurrent flavour stock: \n";
+    for (int i = 0; i < flavourCount; i++) {
+        if (showFlavour(possibleFlavours+i, maxQuantityToShow)) check=true;
+    }
+
+    if (!check) cout<<"No flavours match your criteria.\n";
+}
+
+bool showContainer(CONTAINER *container, int maxQuantityToShow)
+{
+    if (container->remaining>maxQuantityToShow and maxQuantityToShow!=0) return false;
+
+    cout<<container->type<<": "<<container->remaining<<endl;
+    return true;
 }
 
 void showContainers(CONTAINER *possibleContainers, int containerCount) {
@@ -136,8 +169,22 @@ void showContainers(CONTAINER *possibleContainers, int containerCount) {
     }
 }
 
+void showContainers(CONTAINER *possibleContainers, int containerCount, int maxQuantityToShow)
+{
+    bool check=false;
+
+    cout << "\nCurrent container stock: \n";
+    for (int i = 0; i < containerCount; i++) {
+        if (showContainer(possibleContainers+i, maxQuantityToShow)) check=true;
+    }
+
+    if (!check) cout<<"No containers match your criteria.\n";
+}
+
 bool enterFlavour(FLAVOUR_TYPE* possibleFlavours, int flavourCount, PRODUCT* newProduct) {
     int choice;
+    bool check=false;
+
     cout<<"Enter the number of your choice: ";
     cin >> choice;
 
@@ -145,13 +192,23 @@ bool enterFlavour(FLAVOUR_TYPE* possibleFlavours, int flavourCount, PRODUCT* new
         cout<<"Invalid option!\n";
         return false;
     }
+
+    //if this is an update operation, return the flavour and update the new flavour
+    if (newProduct->container){
+        check=true;
+        //return the correct ammount to the previous flavour
+        newProduct->flavour->remaining+=newProduct->container->capacity;
+    }
     newProduct->flavour = possibleFlavours + choice - 1;
+    if (check) newProduct->flavour->remaining-=newProduct->container->capacity;
 
     return true;
 }
 
 bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* newProduct) {
     int choice;
+    bool check=false;
+
     cout<<"Enter the number of your choice: ";
     cin >> choice;
 
@@ -159,7 +216,14 @@ bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* 
         cout<<"Invalid option!\n";
         return false;
     }
+
+    //if this is an update operation, return the container
+    if (newProduct->container){
+        check=true;
+        newProduct->container->remaining++;
+    }
     newProduct->container = possibleContainers + choice - 1;
+    if (check) newProduct->container->remaining--;
 
     return true;
 }
@@ -221,6 +285,195 @@ void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* pos
     calculateProductPrice(products+indexOfChoice);
 }
 
+void showFlavourStockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount)
+{
+    int maxQuantityToShow;
+
+    cout<<"Maximum quantity to search for (enter 0 to list all): ";
+    cin>>maxQuantityToShow;
+
+    if (maxQuantityToShow<-1) maxQuantityToShow=0;
+    showFlavours(possibleFlavours, flavourCount, maxQuantityToShow);
+}
+
+void showContainerStockMenu(CONTAINER *possibleContainers, int containerCount)
+{
+    int maxQuantityToShow;
+
+    cout<<"Maximum quantity to search for (enter 0 to list all): ";
+    cin>>maxQuantityToShow;
+
+    if (maxQuantityToShow<-1) maxQuantityToShow=0;
+    showContainers(possibleContainers, containerCount, maxQuantityToShow);
+}
+
+void showFlavourRestockMenu(FLAVOUR_TYPE *flavourToRestock)
+{
+    int userInputQuantity;
+
+    cout<<"\n-- Restock Flavour --\n\n";
+
+    cout<<"Enter new quantity (in grams): ";
+    cin>>userInputQuantity;
+
+    if (userInputQuantity>flavourToRestock->remaining) flavourToRestock->remaining=userInputQuantity;
+    else cout<<"You cannot reduce the quantity of a flavour!\n";
+}
+
+void showFlavourRestockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount)
+{
+    int userInputFlavour, userInputQuantity;
+
+    cout<<"\n---- Restock Flavour ----\n\n";
+    for (int i=0; i<flavourCount; i++){
+        cout<<i+1<<". ";
+        showFlavour(possibleFlavours+i, 0);
+    }
+    cout<<"Choose flavour to restock: ";
+    cin>>userInputFlavour;
+
+    if (userInputFlavour<1 or userInputFlavour>flavourCount){
+        cout<<"Invalid option!\n";
+        return;
+    }
+
+    cout<<endl;
+    showFlavour(possibleFlavours+userInputFlavour-1, 0);
+
+    cout<<"Enter new quantity (in grams): ";
+    cin>>userInputQuantity;
+
+    if (userInputQuantity>possibleFlavours[userInputFlavour-1].remaining) possibleFlavours[userInputFlavour-1].remaining=userInputQuantity;
+    else cout<<"You cannot reduce the quantity of a flavour!\n";
+}
+
+void showContainerRestockMenu(CONTAINER *containerToRestock)
+{
+    int userInputQuantity;
+
+    cout<<"\n---- Restock Container ----\n\n";
+    showContainer(containerToRestock, 0);
+
+    cout<<"Enter new quantity: ";
+    cin>>userInputQuantity;
+
+    if (userInputQuantity>containerToRestock->remaining) containerToRestock->remaining=userInputQuantity;
+    else cout<<"You cannot reduce ammount of containers!\n";
+}
+
+void showContainerRestockMenu(CONTAINER *possibleContainers, int containerCount)
+{
+    int userInputContainer, userInputQuantity;
+
+    cout<<"\n---- Restock Container ----\n\n";
+    for (int i=0; i<containerCount; i++){
+        cout<<i+1<<". ";
+        showContainer(possibleContainers+i, 0);
+    }
+    cout<<"Choose container type to restock: ";
+    cin>>userInputContainer;
+
+    if (userInputContainer<1 or userInputContainer>containerCount){
+        cout<<"Invalid option!\n";
+        return;
+    }
+
+    cout<<endl;
+    showContainer(possibleContainers+userInputContainer-1, 0);
+
+    cout<<"Enter new quantity: ";
+    cin>>userInputQuantity;
+
+    if (userInputQuantity>possibleContainers[userInputContainer-1].remaining) possibleContainers[userInputContainer-1].remaining=userInputQuantity;
+    else cout<<"You cannot reduce ammount of containers!\n";
+}
+
+void runAutoRestock(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount)
+{
+    int maxQuantityToShow;
+    char userInputYN;
+
+    cout<<"\n---- Interactive Restock ----\n\n";
+
+    cout<<"--- Flavours ---\n\n";
+    cout<<"Enter quantity in grams above which you do not want to restock (0 to list all): ";
+    cin>>maxQuantityToShow;
+
+    if (maxQuantityToShow<-1) maxQuantityToShow=0;
+
+    for (int i=0; i<flavourCount; i++){
+        cout<<endl;
+        if (showFlavour(possibleFlavours+i, maxQuantityToShow)){
+            cout<<"Would you like to restock (y/n): ";
+            cin>>userInputYN;
+
+            if (userInputYN=='y' or userInputYN=='Y'){
+                showFlavourRestockMenu(possibleFlavours+i);
+            }
+        }
+    }
+
+    cout<<"\n---- Containers ----\n\n";
+    cout<<"Enter quantity above which you do not want to restock (0 to list all): ";
+    cin>>maxQuantityToShow;
+
+    if (maxQuantityToShow<-1) maxQuantityToShow=0;
+
+    for (int i=0; i<containerCount; i++){
+        cout<<endl;
+        if (showContainer(possibleContainers+i, maxQuantityToShow)){
+            cout<<"Would you like to restock (y/n): ";
+            cin>>userInputYN;
+
+            if (userInputYN=='y' or userInputYN=='Y'){
+                showContainerRestockMenu(possibleContainers+i);
+            }
+        }
+    }
+}
+
+void restockMode(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount)
+{
+    int userInput;
+    bool restockMode=true;
+
+    while (restockMode){
+        cout<<"\n---- Restock Menu ----\n\n";
+        cout<<"1. Run interactive restock\n";
+        cout<<"2. View current flavour availability\n";
+        cout<<"3. View current container stock\n";
+        cout<<"4. Restock flavour\n";
+        cout<<"5. Restock container type\n";
+        cout<<"6. Return to Main Menu\n";
+        cout<<"Enter option from the menu by typing a number: ";
+        cin>>userInput;
+
+        switch (userInput){
+            case 1:
+                runAutoRestock(possibleFlavours, flavourCount, possibleContainers, containerCount);
+                break;
+            case 2:
+                showFlavourStockMenu(possibleFlavours, flavourCount);
+                break;
+            case 3:
+                showContainerStockMenu(possibleContainers, containerCount);
+                break;
+            case 4:
+                showFlavourRestockMenu(possibleFlavours, flavourCount);
+                break;
+            case 5:
+                showContainerRestockMenu(possibleContainers, containerCount);
+                break;
+            case 6:
+                restockMode=false;
+                break;
+            default:
+                cout<<"\nPlease enter a valid option!\n";
+                break;
+        }
+    }
+}
+
 bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
 
     int userInput;
@@ -230,7 +483,8 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
     cout << "2. Create new order" << endl;
     cout << "3. Delete order" << endl;
     cout << "4. Update order" << endl;
-    cout << "5. Quit" << endl;
+    cout << "5. Enter restocking mode" << endl;
+    cout << "6. Quit" << endl;
     cout << "Enter option from the menu by typing a number: ";
     cin >> userInput;
 
@@ -248,7 +502,10 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
     case 4:
         showUpdateOrderMenu(products, productCount, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
-    case 5: return false;
+    case 5:
+        restockMode(possibleFlavours, flavourCount, possibleContainers, containerCount);
+        break;
+    case 6: return false;
     default: cout << "\nPlease enter a valid option!\n"; break;
     }
     return true;
