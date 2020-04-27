@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -99,6 +100,31 @@ void initExampleProducts(PRODUCT* products, int& productCount, int& maxId, FLAVO
 }
 
 /*===================================PRESENTATION LAYER===================================*/
+void parseUserInput(int &out)
+{
+    string in;
+    
+    getline(cin, in);
+
+    for (int i=0; i<in.size(); i++){
+        if (in[i]<'0' or in[i]>'9'){
+            out=-1;
+            return;
+        }
+    }
+
+    out=stoi(in);
+}
+
+void parseUserInput(char &out)
+{
+    string in;
+
+    getline(cin, in);
+
+    out=in[0];
+}
+
 void showProduct(PRODUCT* product)
 {
     cout << "ID: ";
@@ -120,10 +146,12 @@ void showAllProducts(PRODUCT* products, int productCount) {
 }
 
 void showDeleteMenu(PRODUCT* products, int& productCount) {
+    string in;
     int chosenId;
     showAllProducts(products, productCount);
     cout << "Enter the ID of the order that you want to delete: ";
-    cin >> chosenId;
+    parseUserInput(chosenId);
+
     if(!deleteProduct(products, productCount, chosenId)) cout<<"Invalid ID!\n";
 }
 
@@ -186,7 +214,7 @@ bool enterFlavour(FLAVOUR_TYPE* possibleFlavours, int flavourCount, PRODUCT* new
     bool check=false;
 
     cout<<"Enter the number of your choice: ";
-    cin >> choice;
+    parseUserInput(choice);
 
     if (choice < 1 or choice > flavourCount) {
         cout<<"Invalid option!\n";
@@ -210,7 +238,7 @@ bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* 
     bool check=false;
 
     cout<<"Enter the number of your choice: ";
-    cin >> choice;
+    parseUserInput(choice);
 
     if (choice < 1 or choice > containerCount) {
         cout<<"Invalid option!\n";
@@ -250,7 +278,7 @@ void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* pos
 
     showAllProducts(products, productCount);
     cout << "Enter the ID of the order that you want to update: ";
-    cin>>chosenId;
+    parseUserInput(chosenId);
 
     indexOfChoice=findById(products, productCount, chosenId);
     if (indexOfChoice == -1) {
@@ -266,7 +294,7 @@ void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* pos
     cout << products[indexOfChoice].price << " lv" << endl;
     cout << endl;
     cout << "Enter the field's number that you want to update:  ";
-    cin >> chosenField;
+    parseUserInput(chosenField);
     switch (chosenField)
     {
     case 1:
@@ -290,7 +318,7 @@ void showFlavourStockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount)
     int maxQuantityToShow;
 
     cout<<"Maximum quantity to search for (enter 0 to list all): ";
-    cin>>maxQuantityToShow;
+    parseUserInput(maxQuantityToShow);
 
     if (maxQuantityToShow<-1) maxQuantityToShow=0;
     showFlavours(possibleFlavours, flavourCount, maxQuantityToShow);
@@ -301,7 +329,7 @@ void showContainerStockMenu(CONTAINER *possibleContainers, int containerCount)
     int maxQuantityToShow;
 
     cout<<"Maximum quantity to search for (enter 0 to list all): ";
-    cin>>maxQuantityToShow;
+    parseUserInput(maxQuantityToShow);
 
     if (maxQuantityToShow<-1) maxQuantityToShow=0;
     showContainers(possibleContainers, containerCount, maxQuantityToShow);
@@ -314,7 +342,7 @@ void showFlavourRestockMenu(FLAVOUR_TYPE *flavourToRestock)
     cout<<"\n-- Restock Flavour --\n\n";
 
     cout<<"Enter new quantity (in grams): ";
-    cin>>userInputQuantity;
+    parseUserInput(userInputQuantity);
 
     if (userInputQuantity>flavourToRestock->remaining) flavourToRestock->remaining=userInputQuantity;
     else cout<<"You cannot reduce the quantity of a flavour!\n";
@@ -330,7 +358,7 @@ void showFlavourRestockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount)
         showFlavour(possibleFlavours+i, 0);
     }
     cout<<"Choose flavour to restock: ";
-    cin>>userInputFlavour;
+    parseUserInput(userInputFlavour);
 
     if (userInputFlavour<1 or userInputFlavour>flavourCount){
         cout<<"Invalid option!\n";
@@ -341,7 +369,7 @@ void showFlavourRestockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount)
     showFlavour(possibleFlavours+userInputFlavour-1, 0);
 
     cout<<"Enter new quantity (in grams): ";
-    cin>>userInputQuantity;
+    parseUserInput(userInputQuantity);
 
     if (userInputQuantity>possibleFlavours[userInputFlavour-1].remaining) possibleFlavours[userInputFlavour-1].remaining=userInputQuantity;
     else cout<<"You cannot reduce the quantity of a flavour!\n";
@@ -355,7 +383,7 @@ void showContainerRestockMenu(CONTAINER *containerToRestock)
     showContainer(containerToRestock, 0);
 
     cout<<"Enter new quantity: ";
-    cin>>userInputQuantity;
+    parseUserInput(userInputQuantity);
 
     if (userInputQuantity>containerToRestock->remaining) containerToRestock->remaining=userInputQuantity;
     else cout<<"You cannot reduce ammount of containers!\n";
@@ -371,7 +399,7 @@ void showContainerRestockMenu(CONTAINER *possibleContainers, int containerCount)
         showContainer(possibleContainers+i, 0);
     }
     cout<<"Choose container type to restock: ";
-    cin>>userInputContainer;
+    parseUserInput(userInputContainer);
 
     if (userInputContainer<1 or userInputContainer>containerCount){
         cout<<"Invalid option!\n";
@@ -382,7 +410,7 @@ void showContainerRestockMenu(CONTAINER *possibleContainers, int containerCount)
     showContainer(possibleContainers+userInputContainer-1, 0);
 
     cout<<"Enter new quantity: ";
-    cin>>userInputQuantity;
+    parseUserInput(userInputQuantity);
 
     if (userInputQuantity>possibleContainers[userInputContainer-1].remaining) possibleContainers[userInputContainer-1].remaining=userInputQuantity;
     else cout<<"You cannot reduce ammount of containers!\n";
@@ -397,7 +425,7 @@ void runAutoRestock(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER*
 
     cout<<"--- Flavours ---\n\n";
     cout<<"Enter quantity in grams above which you do not want to restock (0 to list all): ";
-    cin>>maxQuantityToShow;
+    parseUserInput(maxQuantityToShow);
 
     if (maxQuantityToShow<-1) maxQuantityToShow=0;
 
@@ -405,7 +433,7 @@ void runAutoRestock(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER*
         cout<<endl;
         if (showFlavour(possibleFlavours+i, maxQuantityToShow)){
             cout<<"Would you like to restock (y/n): ";
-            cin>>userInputYN;
+            parseUserInput(userInputYN);
 
             if (userInputYN=='y' or userInputYN=='Y'){
                 showFlavourRestockMenu(possibleFlavours+i);
@@ -415,7 +443,7 @@ void runAutoRestock(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER*
 
     cout<<"\n---- Containers ----\n\n";
     cout<<"Enter quantity above which you do not want to restock (0 to list all): ";
-    cin>>maxQuantityToShow;
+    parseUserInput(maxQuantityToShow);
 
     if (maxQuantityToShow<-1) maxQuantityToShow=0;
 
@@ -423,7 +451,7 @@ void runAutoRestock(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER*
         cout<<endl;
         if (showContainer(possibleContainers+i, maxQuantityToShow)){
             cout<<"Would you like to restock (y/n): ";
-            cin>>userInputYN;
+            parseUserInput(userInputYN);
 
             if (userInputYN=='y' or userInputYN=='Y'){
                 showContainerRestockMenu(possibleContainers+i);
@@ -446,7 +474,7 @@ void restockMode(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER* po
         cout<<"5. Restock container type\n";
         cout<<"6. Return to Main Menu\n";
         cout<<"Enter option from the menu by typing a number: ";
-        cin>>userInput;
+        parseUserInput(userInput);
 
         switch (userInput){
             case 1:
@@ -486,7 +514,7 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
     cout << "5. Enter restocking mode" << endl;
     cout << "6. Quit" << endl;
     cout << "Enter option from the menu by typing a number: ";
-    cin >> userInput;
+    parseUserInput(userInput);
 
     switch (userInput)
     {
