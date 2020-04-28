@@ -457,46 +457,48 @@ void runAutoRestock(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER*
     }
 }
 
-void restockMode(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount)
+bool showRestockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount)
 {
     int userInput;
-    bool restockMode=true;
 
-    while (restockMode){
-        cout<<"\n---- Restock Menu ----\n\n";
-        cout<<"1. Run interactive restock\n";
-        cout<<"2. View current flavour availability\n";
-        cout<<"3. View current container stock\n";
-        cout<<"4. Restock flavour\n";
-        cout<<"5. Restock container type\n";
-        cout<<"6. Return to Main Menu\n";
-        cout<<"Enter option from the menu by typing a number: ";
-        parseUserInput(userInput);
+    cout<<"\n---- Restock Menu ----\n\n";
+    cout<<"1. Run interactive restock\n";
+    cout<<"2. View current flavour availability\n";
+    cout<<"3. View current container stock\n";
+    cout<<"4. Restock flavour\n";
+    cout<<"5. Restock container type\n";
+    cout<<"6. Return to Main Menu\n";
+    cout<<"Enter option from the menu by typing a number: ";
+    parseUserInput(userInput);
 
-        switch (userInput){
-            case 1:
-                runAutoRestock(possibleFlavours, flavourCount, possibleContainers, containerCount);
-                break;
-            case 2:
-                showFlavourStockMenu(possibleFlavours, flavourCount);
-                break;
-            case 3:
-                showContainerStockMenu(possibleContainers, containerCount);
-                break;
-            case 4:
-                showFlavourRestockMenu(possibleFlavours, flavourCount);
-                break;
-            case 5:
-                showContainerRestockMenu(possibleContainers, containerCount);
-                break;
-            case 6:
-                restockMode=false;
-                break;
-            default:
-                cout<<"\nPlease enter a valid option!\n";
-                break;
-        }
+    switch (userInput){
+        case 1:
+            runAutoRestock(possibleFlavours, flavourCount, possibleContainers, containerCount);
+            break;
+        case 2:
+            showFlavourStockMenu(possibleFlavours, flavourCount);
+            break;
+        case 3:
+            showContainerStockMenu(possibleContainers, containerCount);
+            break;
+        case 4:
+            showFlavourRestockMenu(possibleFlavours, flavourCount);
+            break;
+        case 5:
+            showContainerRestockMenu(possibleContainers, containerCount);
+            break;
+        case 6:
+            return false;
+        default:
+            cout<<"\nPlease enter a valid option!\n";
+            break;
     }
+    return true;
+}
+
+void restockMode(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount)
+{
+    while (showRestockMenu(possibleFlavours, flavourCount, possibleContainers, containerCount));
 }
 
 bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
