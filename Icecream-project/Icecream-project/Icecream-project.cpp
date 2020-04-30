@@ -89,7 +89,7 @@ void calculateProductPrice(PRODUCT* product)
 //Registering a new customer's order 
 void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newProduct) {
     products[productCount] = newProduct;
-    products[productCount].id = maxId++;
+    products[productCount].id = ++maxId;
     calculateProductPrice(products + productCount);
     productCount++;
 
@@ -272,7 +272,7 @@ bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* 
     return true;
 }
 
-void createOrderMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount)
+void showCreateOrderMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount)
 {
     PRODUCT newProduct;
 
@@ -548,9 +548,8 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
 		//In this case you can list all ice creams
         showAllProducts(products, productCount);
         break;
-    case 2:
 		//You can create your own order
-        createOrderMenu(products, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount);
+        showCreateOrderMenu(products, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
     case 3:
 		//"Delete" any order that you want 
@@ -593,7 +592,7 @@ int main()
     PRODUCT products[100];
     CONTAINER possibleContainers[100];
     FLAVOUR_TYPE possibleFlavours[100];
-    int productCount = 0, maxId = 1;
+    int productCount = 0, maxId = 0;
     int containerCount = 0, flavourCount = 0;
     
     initExampleFlavours(possibleFlavours, flavourCount);
