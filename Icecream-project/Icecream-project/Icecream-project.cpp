@@ -3,18 +3,21 @@
 
 using namespace std;
 
+//Contain data about ice cream's flavour
 struct FLAVOUR_TYPE {
     string type="";
     float pricePerKg = 0;
     int remaining=0;
 };
 
+//Contain data about ice cream's container
 struct CONTAINER {
     string type = "";
     int capacity = 0;
     int remaining=0;
 };
 
+//Contain data about the order
 struct PRODUCT {
     FLAVOUR_TYPE *flavour=nullptr;
     CONTAINER *container=nullptr;
@@ -25,6 +28,7 @@ struct PRODUCT {
 
 /*===================================DATA LAYER===================================*/
 
+//Searching for given ID from orders
 int findById(PRODUCT* products, int& productCount, int id)
 {
     int lBound = 0, rBound = productCount - 1, mid = 1, lastMid = 0;
@@ -41,6 +45,7 @@ int findById(PRODUCT* products, int& productCount, int id)
     return -1;
 }
 
+//"Delete" any order that you want
 bool deleteProduct(PRODUCT* products, int& productCount, int id)
 {
     int delPos;
@@ -81,6 +86,7 @@ void calculateProductPrice(PRODUCT* product)
 	product->price = (float)product->container->capacity / 1000 * product->flavour->pricePerKg;
 }
 
+//Registering a new customer's order 
 void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newProduct) {
     products[productCount] = newProduct;
     products[productCount].id = maxId++;
@@ -91,6 +97,7 @@ void createOrder(PRODUCT* products, int& productCount, int& maxId, PRODUCT newPr
     newProduct.container->remaining--;
 }
 
+//We need those products to see how our code work at all
 void initExampleProducts(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
     createOrder(products, productCount, maxId, { possibleFlavours+1, possibleContainers+0, 0,0 });  //flavour   container   price   id
     createOrder(products, productCount, maxId, { possibleFlavours+0, possibleContainers+1, 0,0 });
@@ -99,7 +106,7 @@ void initExampleProducts(PRODUCT* products, int& productCount, int& maxId, FLAVO
     createOrder(products, productCount, maxId, { possibleFlavours+5, possibleContainers+4, 0,0 });
 }
 
-/*===================================PRESENTATION LAYER===================================*/
+//
 void parseUserInput(int &out)
 {
     string in;
@@ -116,6 +123,7 @@ void parseUserInput(int &out)
     out=stoi(in);
 }
 
+//Get user input
 void parseUserInput(char &out)
 {
     string in;
@@ -124,7 +132,9 @@ void parseUserInput(char &out)
 
     out=in[0];
 }
+/*===================================PRESENTATION LAYER===================================*/
 
+//Display order
 void showProduct(PRODUCT* product)
 {
     cout << "ID: ";
@@ -137,6 +147,7 @@ void showProduct(PRODUCT* product)
     cout << product->price << " lv" << endl;
 }
 
+//Listing all order that have been made
 void showAllProducts(PRODUCT* products, int productCount) {
     for (int i = 0; i < productCount; i++) {
         cout<<endl;
@@ -153,6 +164,7 @@ void showDeleteMenu(PRODUCT* products, int& productCount) {
     if(!deleteProduct(products, productCount, chosenId)) cout<<"Invalid ID!\n";
 }
 
+//Listing ice cream's flavour, price per kilogram and its remaining quantity 
 bool showFlavour(FLAVOUR_TYPE *flavour, int maxQuantityToShow)
 {
     if (flavour->remaining>maxQuantityToShow and maxQuantityToShow!=0) return false;
@@ -161,6 +173,7 @@ bool showFlavour(FLAVOUR_TYPE *flavour, int maxQuantityToShow)
     return true;
 }
 
+//Display all available flavours
 void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount) {
     cout << "\nIce cream flavours: \n";
     for (int i = 0; i < flavourCount; i++) {
@@ -168,6 +181,7 @@ void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount) {
     }
 }
 
+//Display flavours in stock mode
 void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount, int maxQuantityToShow)
 {
     bool check=false;
@@ -180,6 +194,7 @@ void showFlavours(FLAVOUR_TYPE *possibleFlavours, int flavourCount, int maxQuant
     if (!check) cout<<"No flavours match your criteria.\n";
 }
 
+//Listing ice cream's container and its remaining quantity 
 bool showContainer(CONTAINER *container, int maxQuantityToShow)
 {
     if (container->remaining>maxQuantityToShow and maxQuantityToShow!=0) return false;
@@ -188,6 +203,7 @@ bool showContainer(CONTAINER *container, int maxQuantityToShow)
     return true;
 }
 
+//Display all available containers
 void showContainers(CONTAINER *possibleContainers, int containerCount) {
     cout << "\nIce cream cones: \n";
     for (int i = 0; i < containerCount; i++) {
@@ -195,6 +211,7 @@ void showContainers(CONTAINER *possibleContainers, int containerCount) {
     }
 }
 
+//Display containers in stock mode
 void showContainers(CONTAINER *possibleContainers, int containerCount, int maxQuantityToShow)
 {
     bool check=false;
@@ -219,10 +236,10 @@ bool enterFlavour(FLAVOUR_TYPE* possibleFlavours, int flavourCount, PRODUCT* new
         return false;
     }
 
-    //if this is an update operation, return the flavour and update the new flavour
+    //If this is an update operation, return the flavour and update the new flavour
     if (newProduct->container){
         check=true;
-        //return the correct ammount to the previous flavour
+        //Return the correct ammount to the previous flavour
         newProduct->flavour->remaining+=newProduct->container->capacity;
     }
     newProduct->flavour = possibleFlavours + choice - 1;
@@ -231,6 +248,7 @@ bool enterFlavour(FLAVOUR_TYPE* possibleFlavours, int flavourCount, PRODUCT* new
     return true;
 }
 
+//A part from the "Create order" option which takes user's input and check whether the input is correct
 bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* newProduct) {
     int choice;
     bool check=false;
@@ -243,7 +261,7 @@ bool enterContainer(CONTAINER* possibleContainers, int containerCount, PRODUCT* 
         return false;
     }
 
-    //if this is an update operation, return the container
+    //If this is an update operation, return the container
     if (newProduct->container){
         check=true;
         newProduct->container->remaining++;
@@ -310,6 +328,7 @@ void showUpdateOrderMenu(PRODUCT* products, int& productCount, FLAVOUR_TYPE* pos
     calculateProductPrice(products+indexOfChoice);
 }
 
+//A part from the restock mode that display the data from the structure "FLAVOUR_TYPE" 
 void showFlavourStockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount)
 {
     int maxQuantityToShow;
@@ -321,6 +340,7 @@ void showFlavourStockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount)
     showFlavours(possibleFlavours, flavourCount, maxQuantityToShow);
 }
 
+//A part from the restock mode that display the data from the structure "CONTAINER"
 void showContainerStockMenu(CONTAINER *possibleContainers, int containerCount)
 {
     int maxQuantityToShow;
@@ -332,6 +352,7 @@ void showContainerStockMenu(CONTAINER *possibleContainers, int containerCount)
     showContainers(possibleContainers, containerCount, maxQuantityToShow);
 }
 
+//Function used in iteractive restock
 void showFlavourRestockMenu(FLAVOUR_TYPE *flavourToRestock)
 {
     int userInputQuantity;
@@ -345,6 +366,7 @@ void showFlavourRestockMenu(FLAVOUR_TYPE *flavourToRestock)
     else cout<<"You cannot reduce the quantity of a flavour!\n";
 }
 
+//Menu from the restock mode specific for the ice creams' flavour
 void showFlavourRestockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount)
 {
     int userInputFlavour, userInputQuantity;
@@ -372,6 +394,7 @@ void showFlavourRestockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount)
     else cout<<"You cannot reduce the quantity of a flavour!\n";
 }
 
+//Function used in iteractive restock 
 void showContainerRestockMenu(CONTAINER *containerToRestock)
 {
     int userInputQuantity;
@@ -413,6 +436,7 @@ void showContainerRestockMenu(CONTAINER *possibleContainers, int containerCount)
     else cout<<"You cannot reduce the ammount of containers!\n";
 }
 
+//Function used in "showRestockMenu"
 void runAutoRestock(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount)
 {
     int maxQuantityToShow;
@@ -457,6 +481,7 @@ void runAutoRestock(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER*
     }
 }
 
+//Menu for restock mode
 bool showRestockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount)
 {
     int userInput;
@@ -496,11 +521,13 @@ bool showRestockMenu(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER
     return true;
 }
 
+//Function which work's until showRestockMenu() returns false 
 void restockMode(FLAVOUR_TYPE *possibleFlavours, int flavourCount, CONTAINER* possibleContainers, int containerCount)
 {
     while (showRestockMenu(possibleFlavours, flavourCount, possibleContainers, containerCount));
 }
 
+//Main menu
 bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* possibleFlavours, int& flavourCount, CONTAINER* possibleContainers, int& containerCount) {
 
     int userInput;
@@ -518,21 +545,28 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
     switch (userInput)
     {
     case 1:
+		//In this case you can list all ice creams
         showAllProducts(products, productCount);
         break;
     case 2:
+		//You can create your own order
         createOrderMenu(products, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
     case 3:
+		//"Delete" any order that you want 
         showDeleteMenu(products, productCount);   
         break;
     case 4:
+		//In this case you can change any field of any order in need 
         showUpdateOrderMenu(products, productCount, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
     case 5:
+		//Restocking the storage
         restockMode(possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
-    case 6: return false;
+    case 6:
+		//Exit option 
+		return false;
     default: cout << "\nPlease enter a valid option!\n"; break;
     }
     return true;
