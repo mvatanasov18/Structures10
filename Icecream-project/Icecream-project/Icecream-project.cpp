@@ -548,6 +548,7 @@ bool showMenu(PRODUCT* products, int& productCount, int& maxId, FLAVOUR_TYPE* po
 		//In this case you can list all ice creams
         showAllProducts(products, productCount);
         break;
+    case 2:
 		//You can create your own order
         showCreateOrderMenu(products, productCount, maxId, possibleFlavours, flavourCount, possibleContainers, containerCount);
         break;
